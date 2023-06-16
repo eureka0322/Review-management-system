@@ -925,7 +925,25 @@
       </div>
   </div>
 </div>
+<link href="https://hoikuhiroba-kuchikomi.com/assets/user/js/slick/slick-theme.css" rel="stylesheet" type="text/css">
+<link href="https://hoikuhiroba-kuchikomi.com/assets/user/js/slick/slick.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="https://hoikuhiroba-kuchikomi.com/assets/user/js/slick/slick.min.js"></script>
 <script>
-
+  jQuery(function($){
+    $('#SchoolSlider').slick({
+      dots: false,
+      arrows: false,
+      slidesToShow:1,
+      centerMode:true,
+      centerPadding:"20px",
+    });
+    $('#PickupSlider').slick({
+      dots: false,
+      arrows: false,
+      slidesToShow:1,
+      centerMode:true,
+      centerPadding:"20px",
+    });
+  });
 </script>
 @endsection

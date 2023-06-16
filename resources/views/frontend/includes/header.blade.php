@@ -202,4 +202,25 @@ $(document).ready(function() {
   });
 });
 
+$("a.top_area_link").on("click", function () {
+    event.preventDefault();
+
+    const area = $(this).data("area");
+    //ナビが開いていたら閉じる
+
+    if ($(window).width() > 630) {
+        $("#HeaderFilter").fadeOut();
+        $("#HeaderWindow").removeClass("active");
+    }
+
+    $("body").css("overflow-y", "hidden"); // 本文の縦スクロールを無効
+    $("body").css("position", "fixed"); // 本文の縦スクロールを無効
+
+    $(".AreaPop").show();
+    $(".school-sp_popup_place_box").hide();
+
+    $(`#${area}`).show();
+
+    return false;
+});
 </script>

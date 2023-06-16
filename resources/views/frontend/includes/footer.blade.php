@@ -36,25 +36,25 @@
                               <a href="/" class="footer_link">トップページ</a>
                           </li>
                           <li class="footer_link_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/terms" class="footer_link">利用規約</a>
+                              <a href="/terms" class="footer_link">利用規約</a>
                           </li>
                           <li class="footer_link_item">
                               <a href="https://www.neo-career.co.jp/policy/" class="footer_link" target="_blank" rel="noopener noreferrer">個人情報の取り扱いについて</a>
                           </li>
                           <li class="footer_link_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/sitemap" class="footer_link">サイトマップ</a>
+                              <a href="/sitemap" class="footer_link">サイトマップ</a>
                           </li>                            
                           <li class="footer_link_item">
                               <a href="https://www.neo-career.co.jp/company/outline/" class="footer_link" target="_blank" rel="noopener noreferrer">運営会社</a>
                           </li>                            
                           <li class="footer_link_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/policy" class="footer_link">運営ポリシー</a>
+                              <a href="/policy" class="footer_link">運営ポリシー</a>
                           </li>
                           <li class="footer_link_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/guide" class="footer_link">口コミ投稿ガイドライン</a>
+                              <a href="/guide" class="footer_link">口コミ投稿ガイドライン</a>
                           </li>
                           <li class="footer_link_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/help" class="footer_link">ヘルプ</a>
+                              <a href="/help" class="footer_link">ヘルプ</a>
                           </li>
 
                           
@@ -94,3 +94,33 @@
       </div>
   </div>
 </footer>
+<script>
+    $(function(){
+        //現在の日付データを取得する準備
+        var day = new Date(); 
+        var y = day.getFullYear(); //西暦を取得
+        var m = day.getMonth()+1; //月を取得
+        var d = day.getDate(); //日を取得
+        //月日1ケタの場合は0を追加
+        if (m < 10) { m = '0' + m; }
+        if (d < 10) { d = '0' + d; }
+        //文字列変換
+        y = y.toString();
+        m = m.toString();
+        d = d.toString();
+        today = y+m+d;//日付を連結させる
+
+        //2022年12月31日中まで表示
+        if(today <= "20240229" ){
+            setTimeout(() => {
+                if(!sessionStorage.getItem('event_popup')) {
+                    sessionStorage.setItem('event_popup', 'on');
+                    $("#EventPopFilter").fadeIn();
+                    $("#EventPopWindow").show();
+                }
+            }, 5000);
+        } else {
+            console.log("event期間が終了したのでevent_popupのincludeをコメントアウトする");
+        }
+    });
+</script>

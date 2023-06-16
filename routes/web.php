@@ -40,14 +40,22 @@ Route::get('get-facility',[HomeController::class, 'getFacilities'])->name('get.f
 Route::get('get-qualification',[HomeController::class, 'getQualifications'])->name('get.qualification');
 
 Route::get('/facility', [DetailViewController::class, 'showByFacility'])->name('get.by.facilictyIds'); 
-Route::get('/nurseries', [DetailViewController::class, 'showNurseries'])->name('get.nurseries'); 
 Route::get('/byprefecture', [DetailViewController::class, 'getByPrefectures'])->name('get.by.prefecture'); 
-// Route::get('/{prefecture}', [DetailViewController::class, 'showByPrefecture'])->name('get.by.prefecture'); 
 
-Route::get('/company', [CompanyController::class, 'showCompanies'])->name('get.copmanies'); 
+Route::get('/nurseries', [DetailViewController::class, 'showNurseries'])->name('get.nurseries'); 
+Route::get('/nurseries/{id}', [DetailViewController::class, 'showNurseryById'])->name('get.by.nurseryid'); 
+
+Route::get('/company', [CompanyController::class, 'showCompanies'])->name('get.companies'); 
 Route::get('/company/{id}', [CompanyController::class, 'showCompanyById'])->name('get.by.companyid'); 
 
 
 Route::get('dashboard', [AuthController::class, 'dashboard'])->middleware(['auth', 'is_verify_email']); 
 Route::get('account/verify/{token}', [AuthController::class, 'verifyAccount'])->name('user.verify'); 
 
+Route::get('/terms', [HomeController::class, 'getTerms'])->name('terms');
+Route::get('/sitemap', [HomeController::class, 'getSitemap'])->name('sitemap');
+Route::get('/policy', [HomeController::class, 'getPolicy'])->name('policy');
+Route::get('/score', [HomeController::class, 'getScore'])->name('score');
+Route::get('/guide', [HomeController::class, 'getGuide'])->name('guide');
+
+Route::get('/help', [HomeController::class, 'getHelp'])->name('help');

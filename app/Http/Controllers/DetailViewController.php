@@ -26,9 +26,8 @@ class DetailViewController extends Controller
      * @return response()
      */
 
-    public function showByPrefecture(Request $request, $prefecture){
-      print_r($prefecture);
-      return view('detailview')->with('selectedPrefectureName', 'hello');
+    public function showNurseryById($id, Request $request) {
+      return view('nurserydetail');
     }
 
     public function showNurseries(Request $request) {

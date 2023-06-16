@@ -49,4 +49,28 @@ class HomeController extends Controller
       $data = compact('qualificationData');
       return response()->json($data);
     }
+
+    public function getTerms() {
+      return view('terms');
+    }
+
+    public function getSitemap() {
+      return view('sitemap');
+    }
+
+    public function getPolicy() {
+      return view('policy');
+    }
+
+    public function getScore() {
+      return view('score');
+    }
+
+    public function getGuide() {
+      return view('guide');
+    }
+
+    public function getHelp() {
+      return view('help');
+    }    
 }
