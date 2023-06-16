@@ -11,6 +11,8 @@ use App\Models\UserVerify;
 use Hash;
 use Illuminate\Support\Str;
 use Mail; 
+use App\Models\PrefectureRegion;
+use App\Models\Facility;
   
 class AuthController extends Controller
 {
@@ -21,6 +23,10 @@ class AuthController extends Controller
      */
     public function index()
     {
+        if(Auth::check()){
+            return redirect()->intended('/');
+        }
+
         return view('auth.login');
     }  
       
@@ -31,6 +37,11 @@ class AuthController extends Controller
      */
     public function registration()
     {
+        
+        if(Auth::check()){
+            return redirect()->intended('/');
+        }
+
         return view('auth.registration');
     }
       
@@ -48,6 +59,12 @@ class AuthController extends Controller
    
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            session()->put('user', [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
             return redirect()->intended('dashboard')
                         ->withSuccess('You have Successfully loggedin');
         }

@@ -71,7 +71,35 @@ class CompanyController extends Controller
 
       $companyData = $this->arrayPaginator($arrayData, $request);
 
-      return view('company', compact('companyData', 'prefectureData', 'facilityData', 'keyword'));
+      $tokyoCityData = DB::table('tbl_city_region')->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
+                          ->where('tbl_prefecture_region.name', 'like', '%東京%')
+                          ->where('tbl_city_region.flag', 1)
+                          ->select('tbl_city_region.id', 'tbl_city_region.name', 'tbl_prefecture_region.id as p_id')
+                          ->get();
+
+      $majorCity = DB::table('tbl_majorcity')->get();
+
+      $otherCityData = $majorCity->map(function($item){
+        $city_ids = DB::table('tbl_city_region')->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
+                      ->where('tbl_city_region.name', 'like', '%'.$item->name.'%')
+                      ->select('tbl_city_region.id', 'tbl_prefecture_region.id as p_id')
+                      ->get();
+        $partUrl = '';
+        $len = count($city_ids);
+        for($i=0;$i<$len;$i++) {
+          $partUrl.='city_ids[]='.$city_ids[$i]->id;
+          if($i < $len-1) $partUrl.='&';
+        }
+
+        return [
+          'id' => $item->id,
+          'p_id' => $city_ids[0]->p_id,
+          'name' => $item->name,
+          'cityUrl' => $partUrl
+        ];
+      });
+
+      return view('company', compact('companyData', 'prefectureData', 'tokyoCityData', 'otherCityData', 'facilityData', 'keyword'));
      }
 
      public function getPopularCompany(){
@@ -211,7 +239,35 @@ class CompanyController extends Controller
       $popularData = $this->getPopularCompany();
       $reviewData = $this->getReviewsByCompanyId($id);
 
-      return view('companydetail', compact('companyData', 'cardData', 'prefectureData', 'facilityData', 'popularData', 'reviewData'));
+      $tokyoCityData = DB::table('tbl_city_region')->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
+                          ->where('tbl_prefecture_region.name', 'like', '%東京%')
+                          ->where('tbl_city_region.flag', 1)
+                          ->select('tbl_city_region.id', 'tbl_city_region.name', 'tbl_prefecture_region.id as p_id')
+                          ->get();
+
+      $majorCity = DB::table('tbl_majorcity')->get();
+
+      $otherCityData = $majorCity->map(function($item){
+        $city_ids = DB::table('tbl_city_region')->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
+                      ->where('tbl_city_region.name', 'like', '%'.$item->name.'%')
+                      ->select('tbl_city_region.id', 'tbl_prefecture_region.id as p_id')
+                      ->get();
+        $partUrl = '';
+        $len = count($city_ids);
+        for($i=0;$i<$len;$i++) {
+          $partUrl.='city_ids[]='.$city_ids[$i]->id;
+          if($i < $len-1) $partUrl.='&';
+        }
+
+        return [
+          'id' => $item->id,
+          'p_id' => $city_ids[0]->p_id,
+          'name' => $item->name,
+          'cityUrl' => $partUrl
+        ];
+      });
+
+      return view('companydetail', compact('companyData', 'cardData', 'prefectureData', 'facilityData', 'tokyoCityData', 'otherCityData', 'popularData', 'reviewData'));
      }
      
      public function arrayPaginator($collection, $request) {

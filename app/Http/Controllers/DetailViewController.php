@@ -118,7 +118,36 @@ class DetailViewController extends Controller
             $selectedFacilityNames .= $facilityRows[$i]->name;
         }
       } 
-      $data = compact('cardData', 'prefectureData', 'facilityData', 'keyword', 'facility_ids', 'prefecture_id', 'city_ids', 'selectedPrefectureName','selectedCityNames', 'selectedFacilityNames', 'order_type');
+
+      $tokyoCityData = DB::table('tbl_city_region')->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
+                          ->where('tbl_prefecture_region.name', 'like', '%東京%')
+                          ->where('tbl_city_region.flag', 1)
+                          ->select('tbl_city_region.id', 'tbl_city_region.name', 'tbl_prefecture_region.id as p_id')
+                          ->get();
+
+      $majorCity = DB::table('tbl_majorcity')->get();
+
+      $otherCityData = $majorCity->map(function($item){
+        $city_ids = DB::table('tbl_city_region')->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
+                      ->where('tbl_city_region.name', 'like', '%'.$item->name.'%')
+                      ->select('tbl_city_region.id', 'tbl_prefecture_region.id as p_id')
+                      ->get();
+        $partUrl = '';
+        $len = count($city_ids);
+        for($i=0;$i<$len;$i++) {
+          $partUrl.='city_ids[]='.$city_ids[$i]->id;
+          if($i < $len-1) $partUrl.='&';
+        }
+
+        return [
+          'id' => $item->id,
+          'p_id' => $city_ids[0]->p_id,
+          'name' => $item->name,
+          'cityUrl' => $partUrl
+        ];
+      });
+
+      $data = compact('cardData', 'prefectureData', 'tokyoCityData', 'otherCityData', 'facilityData', 'keyword', 'facility_ids', 'prefecture_id', 'city_ids', 'selectedPrefectureName','selectedCityNames', 'selectedFacilityNames', 'order_type');
       return view('nursery', $data);
     }
 

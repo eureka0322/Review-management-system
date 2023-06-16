@@ -18,7 +18,7 @@
               </div>
           </form>
           <div class="header_sub">
-              <a href="/register" class="header_register_link">会員登録(無料)</a>
+              <a href="/register" class="header_register_link">{{session('user') ? session('user')['name'].'さん' : '会員登録(無料)'}}</a>
               <button type="button" class="header_menu_btn" id="HeaderMenuBtn">
                   <span class="top"></span>
                   <span class="middle"></span>

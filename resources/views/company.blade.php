@@ -223,134 +223,21 @@
               <div class="common_area_box">
                   <p class="common_area_title">東京23区</p>
                   <ul class="area_list">
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/chiyodaku" class="area_link">千代田区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/chuuouku" class="area_link">中央区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/minatoku" class="area_link">港区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/shinjukuku" class="area_link">新宿区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/bunkyouku" class="area_link">文京区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/taitouku" class="area_link">台東区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/sumidaku" class="area_link">墨田区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/koutouku" class="area_link">江東区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/shinagawaku" class="area_link">品川区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/meguroku" class="area_link">目黒区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/ootaku" class="area_link">大田区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/setagayaku" class="area_link">世田谷区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/shibuyaku" class="area_link">渋谷区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/nakanoku" class="area_link">中野区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/suginamiku" class="area_link">杉並区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/toshimaku" class="area_link">豊島区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/kitaku" class="area_link">北区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/arakawaku" class="area_link">荒川区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/itabashiku" class="area_link">板橋区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/nerimaku" class="area_link">練馬区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/adachiku" class="area_link">足立区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/katsushikaku" class="area_link">葛飾区</a>
-                      </li>
-                      <li class="area_item">
-                          <a href="https://hoikuhiroba-kuchikomi.com/tokyo/edogawaku" class="area_link">江戸川区</a>
-                      </li>
+                    @foreach ($tokyoCityData as $row)
+                    <li class="area_item">
+                      <a href="/nurseries?prefecture_id={{$row->p_id}}&city_ids[]={{$row->id}}" class="area_link">{{$row->name}}</a>
+                    </li>            
+                  @endforeach
                   </ul>
               </div>
               <div class="common_area_box">
                   <p class="common_area_title">全国主要都市</p>
                       <ul class="area_list">
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/hokkaido/sapporoshi" class="area_link">札幌市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/miyagi/sendaishi" class="area_link">仙台市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/saitama/saitamashi" class="area_link">さいたま市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/chiba/chibashi" class="area_link">千葉市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/kanagawa/kawasakishi" class="area_link">川崎市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/kanagawa/yokohamashi" class="area_link">横浜市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/niigata/niigatashi" class="area_link">新潟市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/shizuoka/hamamatsushi" class="area_link">浜松市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/kanagawa/sagamiharashi" class="area_link">相模原市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/shizuoka/shizuokashi" class="area_link">静岡市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/aichi/nagoyashi" class="area_link">名古屋市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/kyoto/kyotoshi" class="area_link">京都市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/osaka/oosakashi" class="area_link">堺市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/hyogo/koubeshihi" class="area_link">神戸市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/okayama/okayamashi" class="area_link">岡山市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/hiroshima/hiroshimashi" class="area_link">広島市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/fukuoka/kitakyuushuushi" class="area_link">福岡市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/kumamoto/kumamotoshi" class="area_link">熊本市</a>
-                          </li>
+                        @foreach ($otherCityData as $row)
+                        <li class="area_item">
+                          <a href="/nurseries?prefecture_id={{$row['p_id']}}&{{$row['cityUrl']}}" class="area_link">{{$row['name']}}</a>
+                        </li>            
+                        @endforeach
                       </ul>
               </div>
           </div>
@@ -449,75 +336,11 @@
                   </div>
                   <div class="common_area-sp_main">
                       <ul class="area_list">
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/chiyodaku" class="area_link">千代田区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/chuuouku" class="area_link">中央区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/minatoku" class="area_link">港区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/shinjukuku" class="area_link">新宿区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/bunkyouku" class="area_link">文京区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/taitouku" class="area_link">台東区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/sumidaku" class="area_link">墨田区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/koutouku" class="area_link">江東区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/shinagawaku" class="area_link">品川区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/meguroku" class="area_link">目黒区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/ootaku" class="area_link">大田区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/setagayaku" class="area_link">世田谷区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/shibuyaku" class="area_link">渋谷区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/nakanoku" class="area_link">中野区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/suginamiku" class="area_link">杉並区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/toshimaku" class="area_link">豊島区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/kitaku" class="area_link">北区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/arakawaku" class="area_link">荒川区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/itabashiku" class="area_link">板橋区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/nerimaku" class="area_link">練馬区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/adachiku" class="area_link">足立区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/katsushikaku" class="area_link">葛飾区</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="https://hoikuhiroba-kuchikomi.com/tokyo/edogawaku" class="area_link">江戸川区</a>
-                          </li>
+                        @foreach ($tokyoCityData as $row)
+                        <li class="area_item">
+                          <a href="/nurseries?prefecture_id={{$row->p_id}}&city_ids[]={{$row->id}}" class="area_link">{{$row->name}}</a>
+                        </li>            
+                        @endforeach
                       </ul>
                   </div>
               </li>
@@ -528,60 +351,11 @@
                   </div>
                   <div class="common_area-sp_main">
                       <ul class="area_list">
-                          <li class="area_item">
-                              <a href="/hokkaido/sapporoshi" class="area_link">札幌市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/miyagi/sendaishi" class="area_link">仙台市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/saitama/saitamashi" class="area_link">さいたま市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/chiba/chibashi" class="area_link">千葉市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/kanagawa/kawasakishi" class="area_link">川崎市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/kanagawa/yokohamashi" class="area_link">横浜市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/niigata/niigatashi" class="area_link">新潟市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/shizuoka/hamamatsushi" class="area_link">浜松市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/kanagawa/sagamiharashi" class="area_link">相模原市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/shizuoka/shizuokashi" class="area_link">静岡市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/aichi/nagoyashi" class="area_link">名古屋市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/kyoto/kyotoshi" class="area_link">京都市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/osaka/oosakashi" class="area_link">堺市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/hyogo/koubeshihi" class="area_link">神戸市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/okayama/okayamashi" class="area_link">岡山市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/hiroshima/hiroshimashi" class="area_link">広島市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/fukuoka/kitakyuushuushi" class="area_link">福岡市</a>
-                          </li>
-                          <li class="area_item">
-                              <a href="/kumamoto/kumamotoshi" class="area_link">熊本市</a>
-                          </li>
+                        @foreach ($otherCityData as $row)
+                        <li class="area_item">
+                          <a href="/nurseries?prefecture_id={{$row['p_id']}}&{{$row['cityUrl']}}" class="area_link">{{$row['name']}}</a>
+                        </li>            
+                        @endforeach
                       </ul>
                   </div>
               </li>

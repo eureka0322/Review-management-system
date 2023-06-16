@@ -1711,8 +1711,9 @@ data-nursery_id="9453"
   </div>
   
 </div>
-</section>            <section class="common_area_block ">
-<div class="common_inner">
+</section>            
+<section class="common_area_block ">
+  <div class="common_inner">
   <div class="common_pc_640" >
       <h2 class="common_title01">
           エリアから気になる保育園を見つける
