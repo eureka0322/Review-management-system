@@ -207,7 +207,11 @@
             <div class="campaign_post_btnarea">
               <img src="{{asset('assets/user/images/character/icon08_pc.svg')}}" alt="口コミを投稿する" class="common_pc_640 campaign_post_icon">
               <img src="{{asset('assets/user/images/character/icon08_sp.svg')}}" alt="口コミを投稿する" class="common_sp_640 campaign_post_icon">
-              <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>
+              @if (session('user'))
+                <a class="campaign_post_btn" style="cursor: pointer" href="/answer">口コミを投稿</a>
+              @else
+                <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>                               
+              @endif
             </div>
           </div>
         </div>

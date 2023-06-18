@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Session;
+use App\Models\Nursery;
 use App\Models\PrefectureRegion;
 use App\Models\Facility;
 use App\Models\Qualification;
@@ -59,6 +60,100 @@ class HomeController extends Controller
                                           ->get();
 
       $data1 = compact('prefectureData', 'facilityData', 'tokyoCityData', 'otherCityData', 'mainPrefectureData');
+      if(Auth::check()){
+        $user = Auth::user();
+
+        $query = Nursery::join('tbl_nursery_facility', 'tbl_nursery.id', '=', 'tbl_nursery_facility.nursery_id')
+                        ->join('tbl_facility', 'tbl_facility.id', '=', 'tbl_nursery_facility.facility_id')
+                        ->join('tbl_cooperate', 'tbl_nursery.cooperate_id', '=', 'tbl_cooperate.id')
+                        ->join('tbl_city_region', 'tbl_nursery.city_id', '=', 'tbl_city_region.id')
+                        ->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id');
+        $result =$query->leftJoin('tbl_nursery_follow', function ($join) use ($user) {
+          $join->on('tbl_nursery_follow.nursery_id', '=', 'tbl_nursery.id')
+              ->where('tbl_nursery_follow.user_id', '=', $user['id']);
+        })->select('tbl_nursery_follow.id as followed_id', 'tbl_nursery.*', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+                
+        // $result = $query->select('tbl_nursery.*', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+        $grouped = $result->groupBy('id')->map(function ($item) {
+          $first = $item->first();
+          $nursery = $first->toArray();
+          $nursery['facility_id'] = $item->pluck('facility_id')->toArray();
+          $nursery['facility_name'] = $item->pluck('facility_name')->toArray();
+          return $nursery;
+        });
+        $statistics = DB::table('tbl_review_relation')->join('tbl_review', 'tbl_review.review_id', '=', 'tbl_review_relation.id')
+                                    ->groupBy('nursery_id')
+                                    ->select('tbl_review_relation.nursery_id', 'tbl_review.content', DB::raw('avg(tbl_review.rating) as review_rating'), DB::raw('count(*) as review_count'))
+                                    ->get();
+        $followed_count = 0;
+        $merged = $grouped->map(function ($item) use ($statistics, &$followed_count) {
+          $id = $item['id'];
+          $stat = $statistics->where('nursery_id', $id)->first();
+          
+          if($item['followed_id']) $followed_count++;
+          return [
+              'id' => $id,
+              'name' => $item['name'],
+              'cooperate_name' => $item['cooperate_name'],
+              'address' => $item['prefecture_name'].$item['city_name'].$item['address'],
+              'facility_id' => $item['facility_id'],
+              'facility_name' => $item['facility_name'],
+              'content' => $stat ? $stat->content : "",
+              'review_rating' => $stat ? number_format($stat->review_rating, 1) : 0,
+              'review_count' => $stat ? $stat->review_count : 0,
+              'followed_id' => $item['followed_id']
+          ];
+        });
+        $followedData = $merged->take(min(3, $followed_count));
+
+
+        $query = Nursery::join('tbl_nursery_facility', 'tbl_nursery.id', '=', 'tbl_nursery_facility.nursery_id')
+                        ->join('tbl_facility', 'tbl_facility.id', '=', 'tbl_nursery_facility.facility_id')
+                        ->join('tbl_cooperate', 'tbl_nursery.cooperate_id', '=', 'tbl_cooperate.id')
+                        ->join('tbl_city_region', 'tbl_nursery.city_id', '=', 'tbl_city_region.id')
+                        ->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id');
+        $result = $query->leftJoin('tbl_review_history', function ($join) use ($user) {
+          $join->on('tbl_review_history.nursery_id', '=', 'tbl_nursery.id')
+              ->where('tbl_review_history.user_id', '=', $user['id']);
+        })->leftJoin('tbl_nursery_follow', function ($join) use ($user) {
+          $join->on('tbl_nursery_follow.nursery_id', '=', 'tbl_nursery.id')
+              ->where('tbl_nursery_follow.user_id', '=', $user['id']);
+        })->select('tbl_review_history.id as history_id', 'tbl_nursery_follow.id as followed_id', 'tbl_nursery.*', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+                
+        // $result = $query->select('tbl_nursery.*', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+        $grouped = $result->groupBy('id')->map(function ($item) {
+          $first = $item->first();
+          $nursery = $first->toArray();
+          $nursery['facility_id'] = $item->pluck('facility_id')->toArray();
+          $nursery['facility_name'] = $item->pluck('facility_name')->toArray();
+          return $nursery;
+        });
+        $statistics = DB::table('tbl_review_relation')->join('tbl_review', 'tbl_review.review_id', '=', 'tbl_review_relation.id')
+                                    ->groupBy('nursery_id')
+                                    ->select('tbl_review_relation.nursery_id', 'tbl_review.content', DB::raw('avg(tbl_review.rating) as review_rating'), DB::raw('count(*) as review_count'))
+                                    ->get();
+        $history_count = 0;
+        $merged = $grouped->map(function ($item) use ($statistics, &$history_count) {
+          $id = $item['id'];
+          $stat = $statistics->where('nursery_id', $id)->first();
+          
+          if($item['history_id']) $history_count++;
+          return [
+              'id' => $id,
+              'name' => $item['name'],
+              'cooperate_name' => $item['cooperate_name'],
+              'address' => $item['prefecture_name'].$item['city_name'].$item['address'],
+              'facility_id' => $item['facility_id'],
+              'facility_name' => $item['facility_name'],
+              'content' => $stat ? $stat->content : "",
+              'review_rating' => $stat ? number_format($stat->review_rating, 1) : 0,
+              'review_count' => $stat ? $stat->review_count : 0,
+              'followed_id' => $item['followed_id']
+          ];
+        });
+        $historyData = $merged->take(min(3, $history_count));        
+        $data1 = compact('prefectureData', 'facilityData', 'tokyoCityData', 'otherCityData', 'mainPrefectureData', 'followedData', 'historyData');
+      }
 
       return view('home', $data1)
         ->with('title', 'Home');

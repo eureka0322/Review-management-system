@@ -213,11 +213,24 @@
                                     @foreach ($item['facility_name'] as $facility)                                    
                                         <p class="school_label">{{$facility}}</p>
                                     @endforeach
-                                    <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                                    {{-- <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
                                         <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
                                         <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
                                         <span>フォロー</span>
+                                    </button> --}}
+                                    @if (session('user'))
+                                    <button type="button" class="common_follow_btn FollowBtn {{isset($item['followed_id'])? 'active': ''}}" data-nursery_id="{{$item['id']}}">
+                                      <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                                      <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                                      <span>フォロー</span>
                                     </button>
+                                  @else
+                                    <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                                      <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                                      <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                                      <span>フォロー</span>
+                                    </button>
+                                  @endif                                    
                                 </div>
                                 <h2 class="school_title">{{$item['name']}}</h2>
                                 <p class="school_place_text">
@@ -283,7 +296,11 @@
                                     @if ($item['review_count'] == 0)
                                         <div class="school_no_block">
                                             <p class="school_no_title"> {{$item['name']}}<br> 口コミ・評判はまだありません </p>
-                                            <button type="button" class="common_btn02 PopBtn" data-pop="Login">口コミを投稿</button>
+                                            @if (session('user'))
+                                                <a class="common_btn02" href="/answer/{{$item['id']}}">口コミを投稿</a>
+                                            @else
+                                                <button type="button" class="common_btn02 PopBtn" data-pop="Login">口コミを投稿</button>                                  
+                                            @endif
                                         </div>
                                     @else
                                         <div class="school_talk_block">
@@ -301,12 +318,11 @@
                                         
                                     @endif
                                 </div>
-                                <a href="nurseries/22738/kuchikomi" class="school_detail_btn">詳細を見る</a>
+                                <a href="{{ route('get.by.nurseryid', ['id' => $item['id'] ]) }}" class="school_detail_btn">詳細を見る</a>
                             </div>
                         </li>
                         @endforeach
                     </ul>
-
                     @if ($cardData->total()>0)
                         <div class="pager_block">
                             <p class="pager_text">全{{$cardData->total()}}件中{{$cardData->firstItem()}}~{{$cardData->lastItem()}}項目を表示中</p>
@@ -353,6 +369,112 @@
                                 @endif
                             </div>
                         </div>
+                    @else
+                        <form method="post" action="" @submit="submitNurseryForm">
+                            <div class="school-all_none_block">
+                                <h2 class="school-all_none_title">
+                                    条件に一致する保育園は<br class="common_sp_640">見つかりませんでした
+                                </h2>
+                                <p class="school-all_none_text">
+                                    保育園情報の新規登録を希望される場合は、園のWEBサイトURLとあわせて申請ください。<br class="common_pc_640">なお、申請後の掲載可否及び完了に関してはご返答いたしませんので、ご了承ください。
+                                </p>
+                                <ul class="school-all_none_list">
+                                    <li class="school-all_none_item">
+                                        <p class="school-all_none_item_title">
+                                            都道府県<span>必須</span>
+                                        </p>
+                                        <select
+                                            name="prefecture_id"
+                                            class="form_select FormSelect active"
+                                        >
+                                        </select>
+                                        <p class="school-all_none_error" v-for="error in v$.data.prefecture_id.$errors" :key="error.$uid">
+                                            都道府県は必須項目です。
+                                        </p>
+                                    </li>
+                                    <li class="school-all_none_item">
+                                        <p class="school-all_none_item_title">
+                                            市区町村<span>必須</span>
+                                        </p>
+                                        <select
+                                            name="city_id"
+                                            class="form_select FormSelect active"
+                                            v-model="nurseryModel.data.city_id"
+                                            @change="v$.data.prefecture_id.$touch()"
+                                        >
+                                            <option :value="''">選択してください</option>
+                                            {{-- <option :value="city.id" v-for="city in nurseryModelCities" :key="city.id">{{ city.name }}</option> --}}
+                                        </select>
+                                        <p
+                                            class="school-all_none_error"
+                                            v-for="error in v$.data.city_id.$errors" :key="error.$uid"
+                                        >
+                                            市区町村は必須項目です。
+                                        </p>
+                                    </li>
+                                    <li class="school-all_none_item">
+                                        <p class="school-all_none_item_title">
+                                            保育園施設名<span>必須</span>
+                                        </p>
+                                        <input
+                                            type="text"
+                                            name="nursery_name"
+                                            class="school-all_none_input"
+                                            placeholder="ネオキャリア保育園"
+                                            v-model="nurseryModel.data.nursery_name"
+                                            @input="v$.data.nursery_name.$touch()"
+                                        >
+                                        <p
+                                            class="school-all_none_error"
+                                            v-for="error in v$.data.nursery_name.$errors"
+                                            :key="error.$uid"
+                                        >
+                                            保育園施設名は必須項目です。
+                                        </p>
+                                    </li>
+                                    <li class="school-all_none_item">
+                                        <p class="school-all_none_item_title">
+                                            保育園WEBサイトURL
+                                        </p>
+                                        <input
+                                            type="text"
+                                            name="url"
+                                            class="school-all_none_input"
+                                            placeholder="https://www.neo-career.co.jp/"
+                                            v-model="nurseryModel.data.url"
+                                            @input="v$.data.url.$touch()"
+                                        >
+                                        <p
+                                            class="school-all_none_error"
+                                            v-for="error in v$.data.url.$errors"
+                                            :key="error.$uid"
+                                        >
+                                            <span v-if="error.$validator == 'url'">
+                                                保育園WEBサイトURLはURL形式で入力してください。
+                                            </span>
+                                            <span v-else>
+                                                保育園WEBサイトURLは必須項目です。
+                                            </span>
+                                        </p>
+                                    </li>
+                                </ul>
+                                <button
+                                    type="submit"
+                                    class="common_btn01 w320 center"
+                                    :class="{ disabled: (v$.$silentErrors.length > 0 || isNurserySubmitted || isCreatedNursery) }"
+                                    v-if="!isCreatedNursery"
+                                >
+                                    申請する
+                                {{-- </button>
+                                <button
+                                    v-else-if="isCreatedNursery"
+                                    type="button"
+                                    class="common_btn01 w320 center disabled"
+                                >
+                                    申請済み
+                                </button> --}}
+                            </div>
+                        </form>
                     @endif
 
 <!-- Event popup -->

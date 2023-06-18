@@ -25,7 +25,8 @@
     {{-- <x-google-analytics /> --}}
 </head>
 <body>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="{{asset('assets/user/js/jquery-3.4.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('assets/user/js/jquery.inview.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/user/js/common.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/user/js/flexibility.js')}}"></script>
     @include('frontend.includes.header')

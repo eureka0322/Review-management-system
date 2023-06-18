@@ -194,6 +194,7 @@ class CompanyController extends Controller
         return $new_array;
       });
 
+      $result = 0;
 
       $query = Nursery::join('tbl_nursery_facility', 'tbl_nursery.id', '=', 'tbl_nursery_facility.nursery_id')
                         ->join('tbl_facility', 'tbl_facility.id', '=', 'tbl_nursery_facility.facility_id')
@@ -201,8 +202,17 @@ class CompanyController extends Controller
                         ->join('tbl_city_region', 'tbl_nursery.city_id', '=', 'tbl_city_region.id')
                         ->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
                         ->where('tbl_cooperate.id', $id);
-      
-      $result = $query->select('tbl_nursery.*', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+      if(Auth::check()){
+        $user = Auth::user();
+        $query->leftJoin('tbl_nursery_follow', function ($join) use ($user) {
+          $join->on('tbl_nursery_follow.nursery_id', '=', 'tbl_nursery.id')
+               ->where('tbl_nursery_follow.user_id', '=', $user['id']);
+        });
+        $result = $query->select('tbl_nursery.*', 'tbl_nursery_follow.id as followed_id', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+      }
+      else
+        $result = $query->select('tbl_nursery.*', 'tbl_prefecture_region.name as prefecture_name', 'tbl_cooperate.name as cooperate_name', 'tbl_city_region.name as city_name', 'tbl_facility.name as facility_name', 'tbl_nursery_facility.facility_id')->get();
+                              
       $grouped = $result->groupBy('id')->map(function ($item) {
         $first = $item->first();
         $nursery = $first->toArray();
@@ -228,6 +238,7 @@ class CompanyController extends Controller
             'content' => $stat ? $stat->content : "",
             'review_rating' => $stat ? number_format($stat->review_rating, 1) : 0,
             'review_count' => $stat ? $stat->review_count : 0,
+            'followed_id' => isset($item['followed_id'])? $item['followed_id']:null
         ];
       });
 

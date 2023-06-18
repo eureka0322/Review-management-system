@@ -65,7 +65,7 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
             ]);
-            return redirect()->intended('dashboard')
+            return redirect()->intended('/')
                         ->withSuccess('You have Successfully loggedin');
         }
   
@@ -100,7 +100,7 @@ class AuthController extends Controller
               $message->subject('Email Verification Mail');
           });
          
-        return redirect("dashboard")->withSuccess('Great! You have Successfully loggedin');
+        return redirect("/")->withSuccess('Great! You have Successfully loggedin');
     }
     
     /**
@@ -111,7 +111,7 @@ class AuthController extends Controller
     public function dashboard()
     {
         if(Auth::check()){
-            return view('dashboard');
+            return view('home');
         }
   
         return redirect("login")->withSuccess('Opps! You do not have access');

@@ -132,11 +132,24 @@
                             {{-- @foreach ($item['facility_name'] as $facility)                                     --}}
                                 <p class="school_label">{{$item['facility_name'][0]}}</p>
                             {{-- @endforeach --}}
-                            <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                            {{-- <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
                                 <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
                                 <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
                                 <span>フォロー</span>
-                            </button>
+                            </button> --}}
+                            @if (session('user'))
+                              <button type="button" class="common_follow_btn FollowBtn {{isset($item['followed_id'])? 'active': ''}}" data-nursery_id="{{$item['id']}}">
+                                <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                                <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                                <span>フォロー</span>
+                              </button>
+                            @else
+                              <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                                <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                                <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                                <span>フォロー</span>
+                              </button>
+                            @endif
                         </div>
                         <h2 class="school_title">{{$item['name']}}</h2>
                         <p class="school_place_text">
@@ -202,7 +215,11 @@
                             @if ($item['review_count'] == 0)
                                 <div class="school_no_block">
                                     <p class="school_no_title"> {{$item['name']}}<br> 口コミ・評判はまだありません </p>
-                                    <button type="button" class="common_btn02 PopBtn" data-pop="Login">口コミを投稿</button>
+                                    @if (session('user'))
+                                      <a class="common_btn02" href="/answer/{{$item['id']}}">口コミを投稿</a>
+                                    @else
+                                      <button type="button" class="common_btn02 PopBtn" data-pop="Login">口コミを投稿</button>                                  
+                                    @endif
                                 </div>
                             @else
                                 <div class="school_talk_block">
@@ -220,7 +237,7 @@
                                 
                             @endif
                         </div>
-                        <a href="nurseries/22738/kuchikomi" class="school_detail_btn">詳細を見る</a>
+                        <a href="{{ route('get.by.nurseryid', ['id' => $item['id']]) }}" class="school_detail_btn">詳細を見る</a>
                     </div>
                   </li>
                   @endforeach                                                                   
@@ -292,6 +309,7 @@
                           <span data-text="{{$item->content}}">{{$item->content}}</span>
                         </p>
                       </div>
+                      @if (!session('user'))
                       <div class="comment_not_active">
                         <div class="not_active">
                           <p class="school-d_post_text">{{substr($item->content, 0 ,90)}}...</p>
@@ -302,7 +320,8 @@
                                 <a href="/login" class="login">ログインはこちら</a>
                             </div>
                         </div>
-                      </div>
+                      </div>                          
+                      @endif
                       <div class="school-d_post_read_box PopBtn" data-pop="Read" style="display: none;">
                         <p class="school-d_post_text">
                           {{$item->content}}
@@ -318,8 +337,8 @@
                     </div>
                     <div class="school-d_post_btnarea">
                       <button type="button" class="school-d_post_like_btn PopBtn " data-pop="Login">
-                        <img src="https://hoikuhiroba-kuchikomi.com/assets/user/images/school/detail/like_icon.svg" alt="like" class="normal">
-                        <img src="https://hoikuhiroba-kuchikomi.com/assets/user/images/school/detail/like_icon_active.svg" alt="like" class="active">
+                        <img src="{{asset('assets/user/images/school/detail/like_icon.svg')}}" alt="like" class="normal">
+                        <img src="{{asset('assets/user/images/school/detail/like_icon_active.svg')}}" alt="like" class="active">
                         <span>いいね！</span>
                         <small>0</small>
                       </button>
@@ -522,7 +541,11 @@
             <div class="campaign_post_btnarea">
               <img src="{{asset('assets/user/images/character/icon08_pc.svg')}}" alt="口コミを投稿する" class="common_pc_640 campaign_post_icon">
               <img src="{{asset('assets/user/images/character/icon08_sp.svg')}}" alt="口コミを投稿する" class="common_sp_640 campaign_post_icon">
-              <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>
+              @if (session('user'))
+                <a class="campaign_post_btn" style="cursor: pointer" href="/answer">口コミを投稿</a>
+              @else
+                <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>                               
+              @endif
             </div>
           </div>
         </div>

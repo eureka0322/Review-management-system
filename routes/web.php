@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DetailViewController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\MypageController;
+use App\Http\Controllers\AnswerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,9 @@ Route::get('/byprefecture', [DetailViewController::class, 'getByPrefectures'])->
 Route::get('/nurseries', [DetailViewController::class, 'showNurseries'])->name('get.nurseries'); 
 Route::get('/nurseries/{id}', [DetailViewController::class, 'showNurseryById'])->name('get.by.nurseryid'); 
 
+Route::post('/toggle_followed_nursery', [MypageController::class, 'followNursery'])->name('post.follow.nursery');
+Route::post('/toggle_liked_evaluation', [MypageController::class, 'likeReview'])->name('post.like.review');
+
 Route::get('/company', [CompanyController::class, 'showCompanies'])->name('get.companies'); 
 Route::get('/company/{id}', [CompanyController::class, 'showCompanyById'])->name('get.by.companyid'); 
 
@@ -59,3 +64,16 @@ Route::get('/score', [HomeController::class, 'getScore'])->name('score');
 Route::get('/guide', [HomeController::class, 'getGuide'])->name('guide');
 
 Route::get('/help', [HomeController::class, 'getHelp'])->name('help');
+
+Route::get('answer', [AnswerController::class, 'answer'])->name('answer');
+
+Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
+Route::get('/mypage/following', [MypageController::class, 'getFollowing'])->name('mypage.following');
+Route::get('/mypage/like', [MypageController::class, 'getLike'])->name('mypage.like');
+Route::get('/mypage/draft', [MypageController::class, 'getDraft'])->name('mypage.draft');
+Route::get('/mypage/review', [MypageController::class, 'getReview'])->name('mypage.review');
+Route::get('/mypage/quiet', [MypageController::class, 'getQuiet'])->name('mypage.quiet');
+
+Route::get('/mypage/user', [MypageController::class, 'getUser'])->name('mypage.user');
+Route::get('/mypage/user/email', [MypageController::class, 'getUseremail'])->name('mypage.user.email');
+Route::get('/mypage/password', [MypageController::class, 'getUserpassword'])->name('mypage.user.password');

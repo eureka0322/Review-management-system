@@ -28,121 +28,150 @@
       </div>
   </div>
 
-  <div class="header_filter" id="HeaderFilter"></div>
-  <div class="header_menu_block" id="HeaderWindow">
-      <div class="header_menu_head">
-          <a href="/" class="header_logo" style="">
-              <img src="{{asset('assets/user/images/header/logo.svg')}}" alt="保育ひろば">
-          </a>
-          <button type="button" class="header_menu_btn active" id="HeaderCloseBtn">
-              <span class="top"></span>
-              <span class="middle"></span>
-              <span class="bottom"></span>
-          </button>
-      </div>
+    <div class="header_filter" id="HeaderFilter"></div>
+    <div class="header_menu_block" id="HeaderWindow">
+        <div class="header_menu_head">
+            <a href="/" class="header_logo" style="">
+                <img src="{{asset('assets/user/images/header/logo.svg')}}" alt="保育ひろば">
+            </a>
+            <button type="button" class="header_menu_btn active" id="HeaderCloseBtn">
+                <span class="top"></span>
+                <span class="middle"></span>
+                <span class="bottom"></span>
+             </button>
+        </div>
                   <!-- before login -->
-          <div class="header_menu_inner">
-              <div class="header_menu_btnarea">
-                  <a href="/login" class="header_login_btn">ログイン</a>
-                  <a href="/register" class="header_register_btn">会員登録</a>
-              </div>
-              <a href="/register" target="_blank" rel="noopener noreferrer" class="top_mv_bnr_block">
-                  <img src="{{asset('assets/user/images/header/manu_march.png')}}" alt="記念キャンペーン" class="header_menu_bnr">
-              </a>
-              <div class="header_menu_search_block">
-                  <div class="header_menu_title_block">
-                      <p class="header_menu_title">口コミ・評判を探す</p>
-                  </div>
-                  <form action="/nurseries" method="get">
-                      <div class="header_menu_search_main">
-                          <input type="text" name="keyword" class="header_menu_search_input" placeholder="キーワードを入力">
-                          <button type="submit" class="header_menu_search_submit">
-                              <img src="{{asset('assets/user/images/header/search_icon_gray.svg')}}" alt="検索">
-                          </button>
-                      </div>
-                  </form>
-              </div>
-              
-              <div class="header_menu_area_block">
-                  <div class="header_menu_title_block">
-                      <p class="header_menu_title">エリアから口コミ・評判をさがす</p>
-                  </div>
-                  <ul class="header_menu_area_list">
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="kanto">関東</a>
-                      </li>
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="kinki">関西</a>
-                      </li>
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="tokai">東海</a>
-                      </li>
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="hokkaido_tohoku">北海道・東北</a>
-                      </li>
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="hokuriku">北陸・甲信越</a>
-                      </li>
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="tyugoku_shikoku">中国・四国</a>
-                      </li>
-                      <li class="header_menu_area_item">
-                          <a href="#" class="header_menu_area_link top_area_link" data-area="kyusyu">九州・沖縄</a>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-          <div class="school-sp_popup_block SchoolPop AreaPop" id="PlaceWindow" style="display: none;">
-          <form action="/nurseries" method="get">
-              <div class="school-sp_popup_head mb0">
-                  <h3 class="school-sp_popup_title">
-                      都道府県で絞り込む
-                  </h3>
-                  <button type="button" class="school-sp_popup_close_btn PopCloseBtn">キャンセル</button>
-              </div>
-              <div class="school-sp_popup_inner btn_fixed">
-                  <div class="school-sp_popup_place_box" id="kanto">
-                      <h3 class="school-sp_popup_place_title">関東</h3>
-                      <ul class="school-sp_popup_place_list">
-                      </ul>
-                  </div>
-                  <div class="school-sp_popup_place_box" id="hokkaido_tohoku">
+        <div class="header_menu_inner">
+            <div class="header_menu_btnarea">
+            @if (session('user'))
+                <a href="/mypage/following" class="header_follow_btn">フォロー中の園</a>
+                <a href="/answer" class="header_post_btn">口コミの投稿</a>                                      
+            @else
+                <a href="/login" class="header_login_btn">ログイン</a>
+                <a href="/register" class="header_register_btn">会員登録</a>                  
+            @endif
+            </div>
+            <a href="{{session('user') ? '/answer' : '/register'}}" target="_blank" rel="noopener noreferrer" class="top_mv_bnr_block">
+                <img src="{{asset('assets/user/images/header/manu_march.png')}}" alt="記念キャンペーン" class="header_menu_bnr">
+            </a>
+            <div class="header_menu_search_block">
+                <div class="header_menu_title_block">
+                    <p class="header_menu_title">口コミ・評判を探す</p>
+                </div>
+                <form action="/nurseries" method="get">
+                    <div class="header_menu_search_main">
+                        <input type="text" name="keyword" class="header_menu_search_input" placeholder="キーワードを入力">
+                        <button type="submit" class="header_menu_search_submit">
+                            <img src="{{asset('assets/user/images/header/search_icon_gray.svg')}}" alt="検索">
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="header_menu_area_block">
+                <div class="header_menu_title_block">
+                    <p class="header_menu_title">エリアから口コミ・評判をさがす</p>
+                </div>
+                <ul class="header_menu_area_list">
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="kanto">関東</a>
+                    </li>
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="kinki">関西</a>
+                    </li>
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="tokai">東海</a>
+                    </li>
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="hokkaido_tohoku">北海道・東北</a>
+                    </li>
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="hokuriku">北陸・甲信越</a>
+                    </li>
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="tyugoku_shikoku">中国・四国</a>
+                    </li>
+                    <li class="header_menu_area_item">
+                        <a href="#" class="header_menu_area_link top_area_link" data-area="kyusyu">九州・沖縄</a>
+                    </li>
+                </ul>
+            </div>
+            @if (session('user'))
+                <div class="header_menu_mypage_block">
+                    <div class="header_menu_title_block">
+                        <p class="header_menu_title">マイメニュー</p>
+                    </div>
+                    <ul class="header_menu_mypage_list">
+                        <li class="header_menu_mypage_item">
+                            <a href="/mypage" class="header_menu_mypage_link">マイページトップ</a>
+                        </li>
+                        <li class="header_menu_mypage_item">
+                            <a href="/answer" class="header_menu_mypage_link">口コミの投稿</a>
+                        </li>
+                        <li class="header_menu_mypage_item">
+                            <a href="/mypage/following" class="header_menu_mypage_link">フォロー中の保育園</a>
+                        </li>
+                        <li class="header_menu_mypage_item">
+                            <a href="/mypage/like" class="header_menu_mypage_link">気になる求人</a>
+                        </li>
+                        <li class="header_menu_mypage_item">
+                            <a href="/mypage/user" class="header_menu_mypage_link">プロフィール・各種設定</a>
+                        </li>
+                    </ul>
+                </div>
+            @endif            
+        </div>
+        <div class="school-sp_popup_block SchoolPop AreaPop" id="PlaceWindow" style="display: none;">
+            <form action="/nurseries" method="get">
+                <div class="school-sp_popup_head mb0">
+                    <h3 class="school-sp_popup_title">
+                        都道府県で絞り込む
+                    </h3>
+                    <button type="button" class="school-sp_popup_close_btn PopCloseBtn">キャンセル</button>
+                </div>
+                <div class="school-sp_popup_inner btn_fixed">
+                    <div class="school-sp_popup_place_box" id="kanto">
+                        <h3 class="school-sp_popup_place_title">関東</h3>
+                        <ul class="school-sp_popup_place_list">
+                        </ul>
+                    </div>
+                    <div class="school-sp_popup_place_box" id="hokkaido_tohoku">
                     <h3 class="school-sp_popup_place_title">北海道・東北</h3>
                     <ul class="school-sp_popup_place_list">
                     </ul>
-                  </div>
-                  <div class="school-sp_popup_place_box" id="hokuriku">
+                    </div>
+                    <div class="school-sp_popup_place_box" id="hokuriku">
                     <h3 class="school-sp_popup_place_title">北陸・甲信越</h3>
                     <ul class="school-sp_popup_place_list">
                     </ul>
-                  </div>
-                  <div class="school-sp_popup_place_box" id="tokai">
+                    </div>
+                    <div class="school-sp_popup_place_box" id="tokai">
                     <h3 class="school-sp_popup_place_title">東海</h3>
                     <ul class="school-sp_popup_place_list">
                     </ul>
-                  </div>
-                  <div class="school-sp_popup_place_box" id="kinki">
+                    </div>
+                    <div class="school-sp_popup_place_box" id="kinki">
                     <h3 class="school-sp_popup_place_title">関西</h3>
                     <ul class="school-sp_popup_place_list">
                     </ul>
-                  </div>
-                  <div class="school-sp_popup_place_box" id="tyugoku_shikoku">
+                    </div>
+                    <div class="school-sp_popup_place_box" id="tyugoku_shikoku">
                     <h3 class="school-sp_popup_place_title">中国・四国</h3>
                     <ul class="school-sp_popup_place_list">
                     </ul>
-                  </div>
-                  <div class="school-sp_popup_place_box" id="kyusyu">
+                    </div>
+                    <div class="school-sp_popup_place_box" id="kyusyu">
                     <h3 class="school-sp_popup_place_title">九州・沖縄</h3>
                     <ul class="school-sp_popup_place_list">
                     </ul>
-                  </div>
-              </div>
-              <div class="school-sp_popup_fixed_btnarea AreaSearch">
-                  <button type="submit" class="school-sp_popup_fixed_submit" disabled="">条件を確定する</button>
-              </div>
-          </form>
-      </div>
-  </div>
+                    </div>
+                </div>
+                <div class="school-sp_popup_fixed_btnarea AreaSearch">
+                    <button type="submit" class="school-sp_popup_fixed_submit" disabled="">条件を確定する</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </header>
 <script>
 

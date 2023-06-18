@@ -169,7 +169,6 @@ jQuery(function ($) {
             data: {
                 nursery_id: nurseryId,
             },
-            dataType: "json",
         })
             .done(function (datas) {})
             .fail(function (XMLHttpRequest, textStatus, errorThrown) {

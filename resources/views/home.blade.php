@@ -27,6 +27,134 @@
     <img src="{{asset('assets/user/images/top/banner_pc_march.png')}}" alt="オープン記念キャンペーン" class="common_pc_640">
     <img src="{{asset('assets/user/images/top/banner_sp_march.png')}}" alt="オープン記念キャンペーン" class="common_sp_640">
 </a>
+<section class="top_school_block">
+  <div class="common_inner">
+      <h1 class="common_title01">
+          <span>東京都で</span>
+          評価の高い保育園
+      </h1>
+      <div class="top_school_main">
+        <img src="{{asset('assets/user/images/character/icon01.svg')}}" alt="あなたの地域で評価の高い保育園" class="top_school_icon">
+        <div class="common_pc">
+          <ul class="top_slider_list">
+            @foreach ($followedData as $item)
+              <li class="top_slider_item">
+                  <div class="school_box">
+                  <div class="school_info_block">
+                      @foreach ($item['facility_name'] as $facility)                                    
+                          <p class="school_label">{{$facility}}</p>
+                      @endforeach
+                      @if (session('user'))
+                        <button type="button" class="common_follow_btn FollowBtn {{isset($item['followed_id'])? 'active': ''}}" data-nursery_id="{{$item['id']}}">
+                          <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                          <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                          <span>フォロー</span>
+                        </button>
+                      @else
+                        <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                          <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                          <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                          <span>フォロー</span>
+                        </button>
+                      @endif
+                  </div>
+                  <h2 class="school_title">{{$item['name']}}</h2>
+                  <p class="school_place_text">
+                      {{$item['cooperate_name']}} / {{$item['address']}}
+                  </p>
+                  <div class="school_content_relative">
+                      @if ($item['review_count'] == 0)
+                          <div class="school_rate_block blur score_none active">
+                              <ul class="school_star_list">
+                                  <li class="school_star_item">
+                                      <img src="{{asset('assets/user/images/star/star10.svg')}}" alt="star10">
+                                  </li>
+                                  <li class="school_star_item">
+                                      <img src="{{asset('assets/user/images/star/star10.svg')}}" alt="star10">
+                                  </li>
+                                  <li class="school_star_item">
+                                      <img src="{{asset('assets/user/images/star/star10.svg')}}" alt="star10">
+                                  </li>
+                                  <li class="school_star_item">
+                                      <img src="{{asset('assets/user/images/star/star00.svg')}}" alt="star00">
+                                  </li>
+                                  <li class="school_star_item">
+                                      <img src="{{asset('assets/user/images/star/star00.svg')}}" alt="star00">
+                                  </li>
+                              </ul>
+                              <p class="school_rate_num">0.0</p>
+                          </div>
+                          <div class="not_enough_score school_place_text school_content_absolute" style="top: 24%; left: 0%; font-size: 13px;">
+                              <strong>十分な数の評価がありません</strong>
+                          </div>
+                      @else
+                      <div class="school_rate_block blur score_none ">
+                          <ul class="school_star_list">
+                              @php
+                                  $cur_rating = $item['review_rating'];
+                              @endphp
+                              @for($i = 0;$i<5;$i++)
+                                  @if ($cur_rating>=1)
+                                      <li class=school_star_item>
+                                          <img src='{{asset('assets/user/images/star/star10.svg')}}' alt='star10'>
+                                      </li>
+                                      @php $cur_rating-=1 @endphp
+                                  @elseif ($cur_rating>0)
+                                      <li class=school_star_item>
+                                          <img src='{{ asset("assets/user/images/star/star0" . $cur_rating * 10 . ".svg") }}' alt='star{{ $cur_rating * 10 }}'>
+                                      </li>
+                                      @php $cur_rating-=1 @endphp
+                                  @else
+                                      <li class=school_star_item>
+                                          <img src='{{asset('assets/user/images/star/star00.svg')}}' alt='star00'>
+                                      </li>
+                                  @endif
+                              @endfor
+                          </ul>
+                          <p class="school_rate_num">{{$item['review_rating']}}</p>        
+                      </div>
+                      @endif
+                  </div>
+                  <p class="school_post_text">
+                      <img src="{{asset('assets/user/images/common/comment_icon.svg')}}" alt="talk">口コミ数<span>{{$item['review_count']}}</span>件
+                  </p>
+                  <div class="school_content_relative">
+                      @if ($item['review_count'] == 0)
+                          <div class="school_no_block">
+                              <p class="school_no_title"> {{$item['name']}}<br> 口コミ・評判はまだありません </p>
+                              @if (session('user'))
+                                  <a class="common_btn02" href="/answer/{{$item['id']}}">口コミを投稿</a>
+                              @else
+                                <button type="button" class="common_btn02 PopBtn" data-pop="Login">口コミを投稿</button>                                  
+                              @endif
+                          </div>
+                      @else
+                          <div class="school_talk_block">
+                              <div class="school_talk_sub">
+                                  <img src='{{asset('assets/user/images/face/good_icon02.svg')}}' alt="良い点">
+                                  <p class="shcool_talk_sub_text color-good">良い点</p>
+                              </div>
+                              <div class="school_talk_main">
+                                  <h3 class="school_talk_title">園庭・園舎</h3>
+                                  <p class="school_talk_text">
+                                      {{$item['content']}}
+                                  </p>
+                              </div>
+                          </div>
+                          
+                      @endif
+                  </div>
+                  <a href="{{ route('get.by.nurseryid', ['id' => $item['id'] ]) }}" class="school_detail_btn">詳細を見る</a>
+              </div>
+          </li>
+          @endforeach
+          </ul>
+        </div>
+      </div>
+  </div>
+</section>
+
+
 <section class="top_area_block">
     <div class="common_inner">
         <h2 class="common_title01">
@@ -338,6 +466,127 @@
     </div>
 </section>
 
+<section class="top_recent_block">
+  <div class="common_inner">
+    <h2 class="common_title01">最近見た保育園</h1>
+    <div class="top_recent_main">
+      <img src="https://hoikuhiroba-kuchikomi.com/assets/user/images/character/icon04.svg" alt="最近見た保育園" class="top_recent_icon">
+      <ul class="top_recent_list">
+        @foreach ($historyData as $item)
+          <li class="top_recent_item">
+              <div class="school_box">
+              <div class="school_info_block">
+                  @foreach ($item['facility_name'] as $facility)                                    
+                      <p class="school_label">{{$facility}}</p>
+                  @endforeach
+                  @if (session('user'))
+                    <button type="button" class="common_follow_btn FollowBtn {{isset($item['followed_id'])? 'active': ''}}" data-nursery_id="{{$item['id']}}">
+                      <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                      <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                      <span>フォロー</span>
+                    </button>
+                  @else
+                    <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                      <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                      <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                      <span>フォロー</span>
+                    </button>
+                  @endif
+              </div>
+              <h2 class="school_title">{{$item['name']}}</h2>
+              <p class="school_place_text">
+                  {{$item['cooperate_name']}} / {{$item['address']}}
+              </p>
+              <div class="school_content_relative">
+                  @if ($item['review_count'] == 0)
+                      <div class="school_rate_block blur score_none active">
+                          <ul class="school_star_list">
+                              <li class="school_star_item">
+                                  <img src="{{asset('assets/user/images/star/star10.svg')}}" alt="star10">
+                              </li>
+                              <li class="school_star_item">
+                                  <img src="{{asset('assets/user/images/star/star10.svg')}}" alt="star10">
+                              </li>
+                              <li class="school_star_item">
+                                  <img src="{{asset('assets/user/images/star/star10.svg')}}" alt="star10">
+                              </li>
+                              <li class="school_star_item">
+                                  <img src="{{asset('assets/user/images/star/star00.svg')}}" alt="star00">
+                              </li>
+                              <li class="school_star_item">
+                                  <img src="{{asset('assets/user/images/star/star00.svg')}}" alt="star00">
+                              </li>
+                          </ul>
+                          <p class="school_rate_num">0.0</p>
+                      </div>
+                      <div class="not_enough_score school_place_text school_content_absolute" style="top: 24%; left: 0%; font-size: 13px;">
+                          <strong>十分な数の評価がありません</strong>
+                      </div>
+                  @else
+                  <div class="school_rate_block blur score_none ">
+                      <ul class="school_star_list">
+                          @php
+                              $cur_rating = $item['review_rating'];
+                          @endphp
+                          @for($i = 0;$i<5;$i++)
+                              @if ($cur_rating>=1)
+                                  <li class=school_star_item>
+                                      <img src='{{asset('assets/user/images/star/star10.svg')}}' alt='star10'>
+                                  </li>
+                                  @php $cur_rating-=1 @endphp
+                              @elseif ($cur_rating>0)
+                                  <li class=school_star_item>
+                                      <img src='{{ asset("assets/user/images/star/star0" . $cur_rating * 10 . ".svg") }}' alt='star{{ $cur_rating * 10 }}'>
+                                  </li>
+                                  @php $cur_rating-=1 @endphp
+                              @else
+                                  <li class=school_star_item>
+                                      <img src='{{asset('assets/user/images/star/star00.svg')}}' alt='star00'>
+                                  </li>
+                              @endif
+                          @endfor
+                      </ul>
+                      <p class="school_rate_num">{{$item['review_rating']}}</p>        
+                  </div>
+                  @endif
+              </div>
+              <p class="school_post_text">
+                  <img src="{{asset('assets/user/images/common/comment_icon.svg')}}" alt="talk">口コミ数<span>{{$item['review_count']}}</span>件
+              </p>
+              <div class="school_content_relative">
+                  @if ($item['review_count'] == 0)
+                      <div class="school_no_block">
+                          <p class="school_no_title"> {{$item['name']}}<br> 口コミ・評判はまだありません </p>                              
+                          @if (session('user'))
+                            <a class="common_btn02" href="/answer/{{$item['id']}}">口コミを投稿</a>
+                          @else
+                            <button type="button" class="common_btn02 PopBtn" data-pop="Login">口コミを投稿</button>                                  
+                          @endif
+                      </div>
+                  @else
+                      <div class="school_talk_block">
+                          <div class="school_talk_sub">
+                              <img src='{{asset('assets/user/images/face/good_icon02.svg')}}' alt="良い点">
+                              <p class="shcool_talk_sub_text color-good">良い点</p>
+                          </div>
+                          <div class="school_talk_main">
+                              <h3 class="school_talk_title">園庭・園舎</h3>
+                              <p class="school_talk_text">
+                                  {{$item['content']}}
+                              </p>
+                          </div>
+                      </div>
+                      
+                  @endif
+              </div>
+              <a href="{{ route('get.by.nurseryid', ['id' => $item['id'] ]) }}" class="school_detail_btn">詳細を見る</a>
+          </div>
+      </li>
+      @endforeach
+      </ul>
+    </div>
+  </div>
+</section>
 <section class="common_campaign_block top">
   <div class="common_inner">   
     <div class="campaign_layout_block">
@@ -374,7 +623,11 @@
         <div class="campaign_post_btnarea">
           <img src="{{asset('assets/user/images/character/icon08_pc.svg')}}" alt="口コミを投稿する" class="common_pc_640 campaign_post_icon">
           <img src="{{asset('assets/user/images/character/icon08_sp.svg')}}" alt="口コミを投稿する" class="common_sp_640 campaign_post_icon">
-          <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>
+          @if (session('user'))
+            <a class="campaign_post_btn" style="cursor: pointer" href="/answer">口コミを投稿</a>
+          @else
+            <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>                               
+          @endif
         </div>
       </div>
     </div>
