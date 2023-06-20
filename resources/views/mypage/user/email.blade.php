@@ -8,18 +8,19 @@
           <div class="pankuzu_block">
               <ul class="pankuzu_list">
                   <li class="pankuzu_item">
-                      <a href="https://hoikuhiroba-kuchikomi.com" class="pankuzu_link">ホーム</a>
+                      <a href="/" class="pankuzu_link">ホーム</a>
                   </li>
                   <li class="pankuzu_item">
-                      <a href="https://hoikuhiroba-kuchikomi.com/mypage" class="pankuzu_link">マイページ</a>
+                      <a href="/mypage" class="pankuzu_link">マイページ</a>
                   </li>
                   <li class="pankuzu_item">
                       メール配信設定の変更
                   </li>
               </ul>
           </div>
-          <form method="post" action="https://hoikuhiroba-kuchikomi.com/mypage/user/update_email_setting">
-              <input type="hidden" name="_token" value="XVqespi4Skh5QUKVeRZvwJNG3aORJNRLqLbd9RUg">                    <div class="register_bg_wrap mypage_form">
+          <form method="post" action="/mypage/user/update_email_setting">   
+            @csrf        
+              <div class="register_bg_wrap mypage_form">
                   <h1 class="mypage_form_title">
                       メール配信設定の変更
                   </h1>
@@ -32,19 +33,19 @@
                           <ul class="form_check_list">
                               <li class="form_check_item">
                                   <label class="form_check_label">
-                                      <input type="checkbox" name="is_new_reviews" value="1"  checked >
+                                      <input type="checkbox" name="is_new_reviews" value="{{$result1[0]->checked}}"  {{$result1[0]->checked? 'checked' : ''}} >
                                       <span>フォローしている園の新着口コミ</span>
                                   </label>
                               </li>
                               <li class="form_check_item">
                                   <label class="form_check_label">
-                                      <input type="checkbox" name="is_mail_notification" value="1"  checked >
+                                      <input type="checkbox" name="is_mail_notification" value="{{$result2[0]->checked}}"  {{$result2[0]->checked? 'checked' : ''}} >
                                       <span>保育ひろばからのお知らせメール</span>
                                   </label>
                               </li>
                               <li class="form_check_item">
                                   <label class="form_check_label">
-                                      <input type="checkbox" name="is_delivery_content" value="1"  checked >
+                                      <input type="checkbox" name="is_delivery_content" value="{{$result3[0]->checked}}"  {{$result3[0]->checked? 'checked' : ''}} >
                                       <span>求人関連のコンテンツを配信するメール</span>
                                   </label>
                               </li>
@@ -57,7 +58,7 @@
                   </ul>
                   <div class="form_btnarea">
                       <button type="submit" class="common_btn01">設定を変更する</button>
-                      <a href="https://hoikuhiroba-kuchikomi.com/mypage" class="common_btn04">キャンセル</a>
+                      <a href="/mypage" class="common_btn04">キャンセル</a>
                   </div>
               </div>
           </form>

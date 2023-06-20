@@ -200,4 +200,30 @@ class HomeController extends Controller
     public function getHelp() {
       return view('help');
     }    
+
+    public function getHelpContact1() {
+      return view('help.contact1');
+    }
+    public function getHelpContact2() {
+      return view('help.contact2');
+    }
+
+    public function postHelpContact(Request $request) {
+      $data = $request->all();
+      $result = DB::table('tbl_faq')->insert(['query_type'=> $data['query_type'], 'contact_type' => $data['contact_type'], 'name' => $data['name'], 'cooperate_name' => isset($data['nursery_name'])?$data['nursery_name']:"", 'email' => $data['email'], 'content' => $data['content']]);
+      if($result) return view('help.complete');
+    }
+
+    public function addNewNursery(Request $request) {
+      $data = $request->all();
+      $request->validate([
+          'prefecture_id' => 'required',
+          'city_id' => 'required',
+          'nursery_name' => 'required',
+          'url' => 'required'
+      ]);
+
+      $id = DB::table('tbl_new_nursery')->insert(['name' => $data['nursery_name'], 'prefecture_id' => $data['prefecture_id'], 'city_id' => $data['city_id'], 'site_url' => $data['url']]);
+      if($id) return back()->with('success', 'New nursery is inserted successfully.');
+    }
 }

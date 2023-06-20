@@ -27,6 +27,8 @@
     <img src="{{asset('assets/user/images/top/banner_pc_march.png')}}" alt="オープン記念キャンペーン" class="common_pc_640">
     <img src="{{asset('assets/user/images/top/banner_sp_march.png')}}" alt="オープン記念キャンペーン" class="common_sp_640">
 </a>
+
+@if (isset($followedData))
 <section class="top_school_block">
   <div class="common_inner">
       <h1 class="common_title01">
@@ -153,7 +155,7 @@
       </div>
   </div>
 </section>
-
+@endif
 
 <section class="top_area_block">
     <div class="common_inner">
@@ -466,6 +468,7 @@
     </div>
 </section>
 
+@if (isset($historyData))
 <section class="top_recent_block">
   <div class="common_inner">
     <h2 class="common_title01">最近見た保育園</h1>
@@ -633,6 +636,7 @@
     </div>
   </div>
 </section>
+@endif
 
 <section class="common_qa_block top">
     <div class="common_inner">
@@ -683,7 +687,52 @@
         </ul>
     </div>
 </section>
-
+<section class="common_campaign_block mypage">
+  <div class="common_inner">   
+      <div class="campaign_layout_block">
+      <div class="campaign_search_block">
+          <h2 class="campaign_search_main_title">保育士による<br class="common_sp_640">口コミ・評判を探す</h2>
+          <div class="campaign_search_box">
+          <h3 class="campaign_search_title">法人名で口コミを探す</h3>
+          <a href="/company" class="campaign_search_btn">法人一覧を見る</a>
+          </div>
+          <div class="campaign_search_box">
+          <h3 class="campaign_search_title">施設形態から口コミを探す</h3>
+          <ul class="campaign_search_list" id="CampaignList">
+              @foreach ($facilityData as $row)
+              @if ($row->id<6)
+                  <li class="campaign_search_item">
+                  <a href="/nurseries?facility_type_ids%5B%5D={{$row->id}}" class="campaign_search_link">{{$row->name}}</a>
+                  </li>                              
+              @else
+                  <li class="campaign_search_item  no_active CampaignItem ">
+                  <a href="/nurseries?facility_type_ids%5B%5D={{$row->id}}" class="campaign_search_link">{{$row->name}}</a>
+                  </li>                          
+              @endif
+              @endforeach
+          </ul>
+          <button type="button" class="campaign_more_btn" id="CampaignBtn"><span></span></button>
+          </div>
+          <img src="{{asset('assets/user/images/character/icon07.svg')}}" alt="保育士による口コミ・評判を探す" class="campaign_search_icon">
+      </div>
+      <div class="campaign_post_block">
+          <h2 class="campaign_post_title">口コミを投稿する</h2>
+          <p class="campaign_post_text">
+          あなたの知っているちょっとした情報が、誰かにとっては大きな一歩を踏み出す力へと変わります。保育士の保育園選びに、助け合いの輪を広げませんか？
+          </p>
+          <div class="campaign_post_btnarea">
+          <img src="{{asset('assets/user/images/character/icon08_pc.svg')}}" alt="口コミを投稿する" class="common_pc_640 campaign_post_icon">
+          <img src="{{asset('assets/user/images/character/icon08_sp.svg')}}" alt="口コミを投稿する" class="common_sp_640 campaign_post_icon">
+          @if (session('user'))
+              <a class="campaign_post_btn" style="cursor: pointer" href="/answer">口コミを投稿</a>
+          @else
+              <div class="campaign_post_btn PopBtn" style="cursor: pointer" data-pop="Login">口コミを投稿</div>                               
+          @endif
+          </div>
+      </div>
+      </div>
+  </div>
+</section>
 <section class="common_area_block ">
     <div class="common_inner">
         <div class="common_pc_640" style="display: none;">

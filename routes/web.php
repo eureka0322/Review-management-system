@@ -26,11 +26,16 @@ use App\Http\Controllers\AnswerController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::get('/get-cities-by-prefecture-id', [AuthController::class, 'getCitiesByPrefectureID']);
+
+Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post'); 
 Route::get('register', [AuthController::class, 'registration'])->name('register');
-Route::post('post-registrater', [AuthController::class, 'postRegistration'])->name('register.post'); 
+Route::post('post-registrater', [AuthController::class, 'postRegistration'])->name('register.post');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('confirm', [AuthController::class, 'postConfirm'])->name('post.confirm');
+Route::get('complete', [AuthController::class, 'postComplete'])->name('post.complete');
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
 Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
@@ -64,16 +69,29 @@ Route::get('/score', [HomeController::class, 'getScore'])->name('score');
 Route::get('/guide', [HomeController::class, 'getGuide'])->name('guide');
 
 Route::get('/help', [HomeController::class, 'getHelp'])->name('help');
+Route::get('/help/contact1', [HomeController::class, 'getHelpContact1'])->name('help.contact1');
+Route::get('/help/contact2', [HomeController::class, 'getHelpContact2'])->name('help.contact2');
+Route::post('/help/confirm', [HomeController::class, 'postHelpContact'])->name('post.help');
 
-Route::get('answer', [AnswerController::class, 'answer'])->name('answer');
+Route::get('answer', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer');
+Route::get('answer/{ID}', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer.id');
 
-Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
-Route::get('/mypage/following', [MypageController::class, 'getFollowing'])->name('mypage.following');
-Route::get('/mypage/like', [MypageController::class, 'getLike'])->name('mypage.like');
-Route::get('/mypage/draft', [MypageController::class, 'getDraft'])->name('mypage.draft');
-Route::get('/mypage/review', [MypageController::class, 'getReview'])->name('mypage.review');
-Route::get('/mypage/quiet', [MypageController::class, 'getQuiet'])->name('mypage.quiet');
+Route::get('/mypage', [MypageController::class, 'index'])->middleware(['auth', 'is_verify_email'])->name('mypage');
+Route::get('/mypage/following', [MypageController::class, 'getFollowing'])->middleware(['auth', 'is_verify_email'])->name('mypage.following');
+Route::get('/mypage/like', [MypageController::class, 'getLike'])->middleware(['auth', 'is_verify_email'])->name('mypage.like');
+Route::get('/mypage/draft', [MypageController::class, 'getDraft'])->middleware(['auth', 'is_verify_email'])->name('mypage.draft');
+Route::get('/mypage/review', [MypageController::class, 'getReview'])->middleware(['auth', 'is_verify_email'])->name('mypage.review');
+Route::get('/mypage/quiet', [MypageController::class, 'getQuiet'])->middleware(['auth', 'is_verify_email'])->name('mypage.quiet');
 
-Route::get('/mypage/user', [MypageController::class, 'getUser'])->name('mypage.user');
-Route::get('/mypage/user/email', [MypageController::class, 'getUseremail'])->name('mypage.user.email');
-Route::get('/mypage/password', [MypageController::class, 'getUserpassword'])->name('mypage.user.password');
+Route::get('/mypage/user', [MypageController::class, 'getUser'])->middleware(['auth', 'is_verify_email'])->name('mypage.user');
+Route::get('/mypage/user/email', [MypageController::class, 'getUseremail'])->middleware(['auth', 'is_verify_email'])->name('mypage.user.email');
+Route::get('/mypage/password', [MypageController::class, 'getUserpassword'])->middleware(['auth', 'is_verify_email'])->name('mypage.user.password'); 
+Route::get('/mypage/complete', [MypageController::class, 'completePassword'])->middleware(['auth', 'is_verify_email'])->name('mypage.password.complete'); 
+Route::put('/change-password', [AuthController::class, 'changePassword'])->middleware(['auth', 'is_verify_email'])->name('change.password'); 
+Route::post('/mypage/user/update_email_setting', [AuthController::class, 'changeEmailSettings'])->middleware(['auth', 'is_verify_email'])->name('update.email.setting'); 
+
+Route::get('/mypage/quiet/survey', [MypageController::class, 'getSurvey'])->middleware(['auth', 'is_verify_email'])->name('get.survey'); 
+Route::post('/mypage/quiet/store', [MypageController::class, 'removeUser'])->middleware(['auth', 'is_verify_email'])->name('remove.user');
+
+// Route::get('/citydata', [HomeController::class], 'getCityData')->name('get.city.data');
+Route::post('/nursery/submitnew', [HomeController::class, 'addNewNursery'])->middleware(['auth', 'is_verify_email'])->name('add.nursery');

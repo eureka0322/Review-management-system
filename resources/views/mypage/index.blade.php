@@ -16,7 +16,10 @@
               </ul>
           </div>
           <h1 class="others_title02">
-              {{session('user')['name']}}さんのページ
+            @if (isset(session('user')['name']))
+                {{session('user')['name']}}さんのページ
+            @endif
+              
           </h1>
           <div class="others_sitemap_block">
               <div class="others_sitemap_box">

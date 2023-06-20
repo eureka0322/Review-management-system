@@ -2,8 +2,11 @@
 
 @section('content')
 @php
-    // $selectedPrefectureName = 'Tokyo';
+    $evaluation_name = array('園庭・園舎', '職員同士の人間関係', '主任・園長との人間関係', '保護者との人間関係', '給与・福利厚生', 'シフトの融通', '業務量', '保育方針');
+    $contract_name = array('正社員', '契約・派遣社員', 'パート・アルバイト', 'その他');
+    $work_period = array('2001-2005', '2006-2010', '2011-2015', '2016-2020', '2021~', 'other');
 @endphp
+
 <main class="common_main" id="nursery_main">
   <div class="school_wrap">
       <div class="school_inner">
@@ -213,24 +216,19 @@
                                     @foreach ($item['facility_name'] as $facility)                                    
                                         <p class="school_label">{{$facility}}</p>
                                     @endforeach
-                                    {{-- <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                                    @if (session('user'))
+                                        <button type="button" class="common_follow_btn FollowBtn {{isset($item['followed_id'])? 'active': ''}}" data-nursery_id="{{$item['id']}}">
                                         <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
                                         <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
                                         <span>フォロー</span>
-                                    </button> --}}
-                                    @if (session('user'))
-                                    <button type="button" class="common_follow_btn FollowBtn {{isset($item['followed_id'])? 'active': ''}}" data-nursery_id="{{$item['id']}}">
-                                      <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
-                                      <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
-                                      <span>フォロー</span>
-                                    </button>
-                                  @else
-                                    <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
-                                      <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
-                                      <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
-                                      <span>フォロー</span>
-                                    </button>
-                                  @endif                                    
+                                        </button>
+                                    @else
+                                        <button type="button" class="common_follow_btn PopBtn" data-pop="Login">
+                                        <img src="{{asset('assets/user/images/common/follow_add_icon.svg')}}" alt="add" class="normal_icon">
+                                        <img src="{{asset('assets/user/images/common/follow_check_icon.svg')}}" alt="checked" class="active_icon">
+                                        <span>フォロー</span>
+                                        </button>
+                                    @endif
                                 </div>
                                 <h2 class="school_title">{{$item['name']}}</h2>
                                 <p class="school_place_text">
@@ -309,7 +307,7 @@
                                                 <p class="shcool_talk_sub_text color-good">良い点</p>
                                             </div>
                                             <div class="school_talk_main">
-                                                <h3 class="school_talk_title">園庭・園舎</h3>
+                                                <h3 class="school_talk_title">{{$evaluation_name[$item['employment']-1]}}</h3>
                                                 <p class="school_talk_text">
                                                     {{$item['content']}}
                                                 </p>
@@ -370,7 +368,8 @@
                             </div>
                         </div>
                     @else
-                        <form method="post" action="" @submit="submitNurseryForm">
+                        <form method="post" action="{{route('add.nursery')}}">
+                            @csrf
                             <div class="school-all_none_block">
                                 <h2 class="school-all_none_title">
                                     条件に一致する保育園は<br class="common_sp_640">見つかりませんでした
@@ -386,11 +385,12 @@
                                         <select
                                             name="prefecture_id"
                                             class="form_select FormSelect active"
+                                            id = "prefecture_school"
                                         >
                                         </select>
-                                        <p class="school-all_none_error" v-for="error in v$.data.prefecture_id.$errors" :key="error.$uid">
+                                        {{-- <p class="school-all_none_error" v-for="error in v$.data.prefecture_id.$errors" :key="error.$uid">
                                             都道府県は必須項目です。
-                                        </p>
+                                        </p> --}}
                                     </li>
                                     <li class="school-all_none_item">
                                         <p class="school-all_none_item_title">
@@ -398,19 +398,16 @@
                                         </p>
                                         <select
                                             name="city_id"
+                                            id = "city_school"
                                             class="form_select FormSelect active"
-                                            v-model="nurseryModel.data.city_id"
-                                            @change="v$.data.prefecture_id.$touch()"
                                         >
-                                            <option :value="''">選択してください</option>
-                                            {{-- <option :value="city.id" v-for="city in nurseryModelCities" :key="city.id">{{ city.name }}</option> --}}
+
                                         </select>
-                                        <p
+                                        {{-- <p
                                             class="school-all_none_error"
-                                            v-for="error in v$.data.city_id.$errors" :key="error.$uid"
                                         >
                                             市区町村は必須項目です。
-                                        </p>
+                                        </p> --}}
                                     </li>
                                     <li class="school-all_none_item">
                                         <p class="school-all_none_item_title">
@@ -421,16 +418,12 @@
                                             name="nursery_name"
                                             class="school-all_none_input"
                                             placeholder="ネオキャリア保育園"
-                                            v-model="nurseryModel.data.nursery_name"
-                                            @input="v$.data.nursery_name.$touch()"
                                         >
-                                        <p
+                                        {{-- <p
                                             class="school-all_none_error"
-                                            v-for="error in v$.data.nursery_name.$errors"
-                                            :key="error.$uid"
                                         >
                                             保育園施設名は必須項目です。
-                                        </p>
+                                        </p> --}}
                                     </li>
                                     <li class="school-all_none_item">
                                         <p class="school-all_none_item_title">
@@ -441,10 +434,8 @@
                                             name="url"
                                             class="school-all_none_input"
                                             placeholder="https://www.neo-career.co.jp/"
-                                            v-model="nurseryModel.data.url"
-                                            @input="v$.data.url.$touch()"
                                         >
-                                        <p
+                                        {{-- <p
                                             class="school-all_none_error"
                                             v-for="error in v$.data.url.$errors"
                                             :key="error.$uid"
@@ -455,14 +446,13 @@
                                             <span v-else>
                                                 保育園WEBサイトURLは必須項目です。
                                             </span>
-                                        </p>
+                                        </p> --}}
                                     </li>
                                 </ul>
                                 <button
                                     type="submit"
+                                    {{-- class="common_btn01 w320 center" --}}
                                     class="common_btn01 w320 center"
-                                    :class="{ disabled: (v$.$silentErrors.length > 0 || isNurserySubmitted || isCreatedNursery) }"
-                                    v-if="!isCreatedNursery"
                                 >
                                     申請する
                                 {{-- </button>
@@ -929,6 +919,27 @@ $("#prefecture_select").on('change', function() {
     loadPrefectureData($("#prefecture_select").val());
 })
 
+
+
+$("#prefecture_school").on('change', function() {
+    // loadCityData($("#prefecture_school").val());
+    $.ajax({
+            url: '/get-cities-by-prefecture-id',
+            type: 'GET',
+            dataType: 'json',
+            data: { prefecture_id: $("#prefecture_school").val() },
+            success: function(data) {
+
+                // Clear second dropdown
+                $('#city_school').empty();
+
+                // Populate second dropdown with matching cities
+                $.each(data, function(key, value) {
+                    $('#city_school').append('<option name="city_id" value="' + value.id + '">' + value.name + '</option>');
+                });
+            }
+        });
+})
 $("#sortType").on('change', function() {
     var currentUrl = window.location.href;
     var newUrl;
@@ -953,9 +964,12 @@ $(document).ready(function() {
     type: "GET",
     success: function(data){
         $("#prefecture_select").empty();
+        $("#prefecture_school").empty();
         $("#prefecture_select").append('<option value="">選択してください</option>');
+        $("#prefecture_school").append('<option value="">選択してください</option>');
         for(var i=0;i<data.prefectureData.length;i++){
             $("#prefecture_select").append(templateLOption(data.prefectureData[i].id, data.prefectureData[i].name));
+            $("#prefecture_school").append(templateLOption(data.prefectureData[i].id, data.prefectureData[i].name));
         }
 
         let prefecture_id = {!! json_encode($prefecture_id) !!};
