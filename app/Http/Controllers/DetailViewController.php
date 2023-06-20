@@ -234,7 +234,7 @@ class DetailViewController extends Controller
       });
       $statistics = DB::table('tbl_review_relation')->join('tbl_review', 'tbl_review.review_id', '=', 'tbl_review_relation.id')
                                    ->groupBy('nursery_id')
-                                   ->select('tbl_review_relation.nursery_id', 'tbl_review.employment', 'tbl_review.rating', 'tbl_review.content', DB::raw('avg(tbl_review.rating) as review_rating'), DB::raw('count(*) as review_count'))
+                                   ->select('tbl_review_relation.nursery_id', 'tbl_review.review_type', 'tbl_review.rating', 'tbl_review.content', DB::raw('avg(tbl_review.rating) as review_rating'), DB::raw('count(*) as review_count'))
                                    ->get();
       $merged = $grouped->map(function ($item) use ($statistics) {
         $id = $item['id'];
@@ -247,7 +247,7 @@ class DetailViewController extends Controller
             'address' => $item['prefecture_name'].$item['city_name'].$item['address'],
             'facility_id' => $item['facility_id'],
             'facility_name' => $item['facility_name'],
-            'employment' => $stat ? $stat->employment : "",
+            'review_type' => $stat ? $stat->review_type : "",
             'rating' => $stat ? $stat->rating : "",
             'content' => $stat ? $stat->content : "",
             'review_rating' => $stat ? number_format($stat->review_rating, 1) : 0,

@@ -73,8 +73,8 @@ Route::get('/help/contact1', [HomeController::class, 'getHelpContact1'])->name('
 Route::get('/help/contact2', [HomeController::class, 'getHelpContact2'])->name('help.contact2');
 Route::post('/help/confirm', [HomeController::class, 'postHelpContact'])->name('post.help');
 
-Route::get('answer', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer');
-Route::get('answer/{ID}', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer.id');
+// Route::get('answer', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer');
+// Route::get('answer/{ID}', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer.id');
 
 Route::get('/mypage', [MypageController::class, 'index'])->middleware(['auth', 'is_verify_email'])->name('mypage');
 Route::get('/mypage/following', [MypageController::class, 'getFollowing'])->middleware(['auth', 'is_verify_email'])->name('mypage.following');
@@ -95,3 +95,10 @@ Route::post('/mypage/quiet/store', [MypageController::class, 'removeUser'])->mid
 
 // Route::get('/citydata', [HomeController::class], 'getCityData')->name('get.city.data');
 Route::post('/nursery/submitnew', [HomeController::class, 'addNewNursery'])->middleware(['auth', 'is_verify_email'])->name('add.nursery');
+
+
+Route::get('answer', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer');
+Route::get('answer/{id}', [AnswerController::class, 'showschoolById'])->middleware(['auth', 'is_verify_email'])->name('get.answer');
+// Route::post('store', [AnswerController::class, 'store'])->name('store');
+
+Route::post('/store', 'AnswerController@store');

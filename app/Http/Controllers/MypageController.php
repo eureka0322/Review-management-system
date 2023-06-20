@@ -337,7 +337,7 @@ class MypageController extends Controller
       $result2 = DB::table('tbl_email_delivery')->where('user_id', Auth::user()->id)->where('setting_id', 2)->get('checked');
       $result3 = DB::table('tbl_email_delivery')->where('user_id', Auth::user()->id)->where('setting_id', 3)->get('checked');
       
-      print_r($result3);
+      // print_r($result3);
       return view('mypage.user.email', compact('result1', 'result2', 'result3'));
     }    
     public function getUserpassword() {

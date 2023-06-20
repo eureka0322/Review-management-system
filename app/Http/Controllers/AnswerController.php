@@ -5,60 +5,102 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Session;
 use App\Models\PrefectureRegion;
 use App\Models\City;
 use App\Models\Qual_User;
 use App\Models\Users;
+use App\Models\Review;
+use App\Models\ReviewRelation;
 
 class AnswerController extends Controller
 {
     public function index()
     {
-  
-        return view('answer');
-    }  
+        $data = $this->searchnursery()->get();
+        $schools = $this->searchnursery();
+        return view('answer', compact('schools'));
+    }
+    public function store(Request $request)
+    {
+
+        error_log('mark ===> '. json_encode($request->input('mark')));
+
+        $data = $request->all();
+        $review = json_decode($request->input('review'));
+
+        $save_relation = [
+            "nursery_id" => $data['index'][0],
+            "user_id" => $data['user'],
+            "status" => 'approved',
+        ];
+
+        $res_relation = ReviewRelation::create($save_relation);
+        error_log("mark ===> ".json_encode($res_relation));
+
+        $rate=0;
+        if($data['mark'][0]==0)
+            $rate=1;
+        if($data['mark'][0]==1)
+            $rate=2;
+        if($data['mark'][0]==2)
+            $rate=2.5;
+        if($data['mark'][0]==3)
+            $rate=3.5;
+        if($data['mark'][0]==4)
+            $rate=4.5;
+        if($data['mark'][0]==5)
+            $rate=5;
+
+        for($i=0;$i<8;$i++)
+        if($review[$i] != "")
+        {
+            $save = [
+                "employment" => $data['index'][1]+1,
+                "experience" => $data['index'][2]+1,
+                "workperiod" => $data['index'][3]+1,
+                "workhour" => $data['index'][4]+1,
+                "rating" => $rate,
+                "review_type" => $i+1,            
+                "content" => $review[$i],
+                "review_id" => $res_relation->id,
+            ];
+            $res = Review::create($save);
+        }
+        error_log("mark ===> ".json_encode($save));
+
+
+        return response()->json([
+            'data'=> $res
+        ]);
+    }
     public function answer()
     {
-  
-        return view('answer');
-    }  
+        $schools = $this->searchnursery();
+        return view('answer', compact('schools'));
+    }
+    public function showschoolById($id, Request $request) {
+      
+        $data1 = DB::table('tbl_nursery')
+                  ->select('tbl_nursery.id', 'tbl_nursery.name')
+                  ->where('tbl_nursery.id', $id)
+                  ->get();
+
+         $schools = $this->searchnursery();    
+        print_r($data1);
+        return view('answer', compact('schools','data1'));
+    }
     public function searchnursery()
     {
-    //     $data = DB::table('tbl_nursery')
-    //             ->select('tbl_cooperate.id', 'tbl_cooperate.name', 'tbl_cooperate.address', 'tbl_cooperate.postcode','tbl_prefecture_region.name as prefecture_name', 'tbl_city_region.name as city_name', 'tbl_nursery.id AS nursery_id', DB::raw('AVG(tbl_review.rating) AS review_rating'), DB::raw('COUNT(tbl_review.rating) AS review_count'))
-    //             ->join('tbl_nursery', 'tbl_nursery.cooperate_id', '=', 'tbl_cooperate.id')
-    //             ->join('tbl_city_region', 'tbl_cooperate.city_id', '=', 'tbl_city_region.id')
-    //             ->join('tbl_prefecture_region', 'tbl_city_region.prefecture_id', '=', 'tbl_prefecture_region.id')
-    //             ->leftJoin('tbl_review_relation', 'tbl_nursery.id', '=', 'tbl_review_relation.nursery_id')
-    //             ->leftJoin('tbl_review', 'tbl_review_relation.id', '=', 'tbl_review.review_id')
-    //             ->where('tbl_cooperate.id', $id)
-    //             ->groupBy('tbl_cooperate.id', 'tbl_nursery.id')
-    //             ->get();
+        $data = DB::table('tbl_nursery')
+                ->select('name')
+                ->get();
 
-    //   $arrayData = $data->groupBy('id')->map(function($item){
-    //     $count = 0;
-    //     $rating = 0;
-    //     $first = $item->first();
-    //     $fake_count = 0;
-    //     foreach($item as $detail) {
-    //       $count+=$detail->review_count;
-    //       $rating+=$detail->review_rating;
-    //       if($detail->review_rating) $fake_count++;
-    //     }
-    //     if($fake_count!=0)$rating/=$fake_count;
-    //     $rating = number_format($rating, 1);
-    //     $new_array['id'] = $item->first()->id;
-    //     $new_array['name'] = $item->first()->name;
-    //     $new_array['address'] = $item->first()->address;
-    //     $new_array['postcode'] = $item->first()->postcode;
-    //     $new_array['prefecture_name'] = $item->first()->prefecture_name;
-    //     $new_array['city_name'] = $item->first()->city_name;
-    //     $new_array['nursery_count'] = $item->count();
-    //     $new_array['review_count'] = $count;
-    //     $new_array['review_rating'] = $rating;
+        $arrayData = $data->map(function($item){
+            return $item->name;
+        });
 
-    //     return $new_array;          
+        return $arrayData;
     }
-    //
 }

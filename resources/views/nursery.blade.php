@@ -307,7 +307,7 @@
                                                 <p class="shcool_talk_sub_text color-good">良い点</p>
                                             </div>
                                             <div class="school_talk_main">
-                                                <h3 class="school_talk_title">{{$evaluation_name[$item['employment']-1]}}</h3>
+                                                <h3 class="school_talk_title">{{$evaluation_name[$item['review_type']-1]}}</h3>
                                                 <p class="school_talk_text">
                                                     {{$item['content']}}
                                                 </p>
