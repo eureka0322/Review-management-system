@@ -9,6 +9,9 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\MypageController;
 use App\Http\Controllers\AnswerController;
 
+
+use App\Http\Controllers\backend\AdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,8 +40,10 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('confirm', [AuthController::class, 'postConfirm'])->name('post.confirm');
 Route::get('complete', [AuthController::class, 'postComplete'])->name('post.complete');
 
-Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::get('password_forget', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::get('send_password_email_complete', [ForgotPasswordController::class, 'showSendEmail'])->name('show.send.email');
+
+Route::post('send_password_email', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
 Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
@@ -73,9 +78,6 @@ Route::get('/help/contact1', [HomeController::class, 'getHelpContact1'])->name('
 Route::get('/help/contact2', [HomeController::class, 'getHelpContact2'])->name('help.contact2');
 Route::post('/help/confirm', [HomeController::class, 'postHelpContact'])->name('post.help');
 
-// Route::get('answer', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer');
-// Route::get('answer/{ID}', [AnswerController::class, 'answer'])->middleware(['auth', 'is_verify_email'])->name('answer.id');
-
 Route::get('/mypage', [MypageController::class, 'index'])->middleware(['auth', 'is_verify_email'])->name('mypage');
 Route::get('/mypage/following', [MypageController::class, 'getFollowing'])->middleware(['auth', 'is_verify_email'])->name('mypage.following');
 Route::get('/mypage/like', [MypageController::class, 'getLike'])->middleware(['auth', 'is_verify_email'])->name('mypage.like');
@@ -102,3 +104,14 @@ Route::get('answer/{id}', [AnswerController::class, 'showschoolById'])->middlewa
 // Route::post('store', [AnswerController::class, 'store'])->name('store');
 
 Route::post('/store', 'AnswerController@store');
+
+// Admin panel
+
+// Route::get('admin', function () {
+//     return redirect('admin/login');
+// });
+
+// Route::get('admin/login', [AdminController::class, 'login'])->name('admin.login');
+// Route::post('admin/post-login', [AdminController::class, 'postLogin'])->name('admin.login.post'); 
+
+// Route::get('admin/users', [AdminController::class, 'getUsers'])->name('admin.get.users'); 

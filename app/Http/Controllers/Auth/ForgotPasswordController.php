@@ -30,7 +30,7 @@ class ForgotPasswordController extends Controller
           $request->validate([
               'email' => 'required|email|exists:users',
           ]);
-  
+
           $token = Str::random(64);
   
           DB::table('password_resets')->insert([
@@ -39,13 +39,12 @@ class ForgotPasswordController extends Controller
               'created_at' => Carbon::now()
             ]);
 
+        //   Mail::send('email.forgetPassword', ['token' => $token], function($message) use($request){
+        //       $message->to($request->email);
+        //       $message->subject('Reset Password');
+        //   });
   
-          Mail::send('email.forgetPassword', ['token' => $token], function($message) use($request){
-              $message->to($request->email);
-              $message->subject('Reset Password');
-          });
-  
-          return back()->with('message', 'We have e-mailed your password reset link!');
+          return redirect('send_password_email_complete')->with('data', $request->email);
       }
       /**
        * Write code on Method
@@ -86,5 +85,12 @@ class ForgotPasswordController extends Controller
           DB::table('password_resets')->where(['email'=> $request->email])->delete();
   
           return redirect('/login')->with('message', 'Your password has been changed!');
+      }
+
+      public function showSendEmail(Request $request) 
+      {
+        $data = session()->get('data');
+        print_r($data);
+        return view('auth.sendforgetpasswordcomplete', compact('data'));
       }
 }

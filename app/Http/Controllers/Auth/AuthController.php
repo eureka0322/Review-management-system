@@ -69,13 +69,17 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            session()->put('user', [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]);
-            return redirect()->intended('/')
-                        ->withSuccess('You have Successfully loggedin');
+            if($user['status'] == 1){
+                session()->put('user', [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ]);
+                return redirect()->intended('/')
+                            ->withSuccess('You have Successfully loggedin');    
+            }
+            else
+                return redirect("login")->withSuccess('Oppes! You have entered invalid credentials');
         }
   
         return redirect("login")->withSuccess('Oppes! You have entered invalid credentials');
@@ -184,7 +188,8 @@ class AuthController extends Controller
             'birth' => $birthdate,
             'prefecture_id' => $data['prefecture_id'],
             'city_id' => $data['city_id'],
-            'is_email_verified' => 1
+            'is_email_verified' => 1,
+            'role_id' => 2,
         ]);
 
         foreach ($data['qualifications'] as $qualification) {
